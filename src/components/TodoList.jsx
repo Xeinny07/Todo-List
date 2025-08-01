@@ -9,33 +9,42 @@ export default function TodoList() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
-  const todosPerPage = 10;
+  const todosPerPage = 5;
 
   const { data: todos = [], isLoading, isError, error } = useQuery({
     queryKey: ['todos'],
     queryFn: async () => {
       const res = await axios.get('https://jsonplaceholder.typicode.com/todos');
-      return res.data.slice(0, 30); // demo limit
+      return res.data.slice(0,10); 
     }
   });
 
   // Mutations
-  const addTodoMutation = useMutation({
-    mutationFn: async (title) => {
-      const res = await axios.post('https://jsonplaceholder.typicode.com/todos', {
-        title,
-        completed: false,
-        userId: 1,
-      });
-      return res.data;
-    },
-    onSuccess: (newTodo) => {
-      queryClient.setQueryData(['todos'], (old = []) => [
-        ...old,
-        { ...newTodo, id: Date.now() },
-      ]);
-    },
-  });
+
+const addTodoMutation = useMutation({
+  mutationFn: async (title) => {
+    const newTodo = {
+      title,
+      completed: false,
+      userId: 1,
+    };
+
+    const res = await fetch('https://jsonplaceholder.typicode.com/todos', {
+      method: 'POST',
+      body: JSON.stringify(newTodo),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!res.ok) throw new Error('Failed to add todo');
+    return res.json();
+  },
+  onSuccess: (data) => {
+    alert('✅ New todo added!');
+  queryClient.setQueryData(['todos'], (old) => [data, ...(old || [])]);
+  },
+});
 
   const deleteTodoMutation = useMutation({
     mutationFn: async (id) => {
@@ -64,7 +73,7 @@ export default function TodoList() {
       const res = await axios.patch(`https://jsonplaceholder.typicode.com/todos/${id}`, {
         completed: !completed,
       });
-      return res.data;
+      return {id, completed: !completed };
     },
     onSuccess: (updated) => {
       queryClient.setQueryData(['todos'], (old) =>
@@ -118,7 +127,7 @@ export default function TodoList() {
             }}
             aria-label="Search todos by title"
             placeholder="Search todos..."
-            className="border px-3 py-2 rounded w-full md:w-auto"
+            className="text-black border px-3 py-2 rounded w-full md:w-auto"
           />
           <select
             value={filterStatus}
@@ -127,7 +136,7 @@ export default function TodoList() {
               setCurrentPage(1);
             }}
             aria-label="Filter by completion status"
-            className="border px-3 py-2 rounded"
+            className=" bg-white text-black border px-3 py-2 rounded"
           >
             <option value="all">All</option>
             <option value="completed">Completed</option>
@@ -137,7 +146,7 @@ export default function TodoList() {
       </header>
 
       <section aria-labelledby="todo-form-section" className="mb-6">
-        <h2 id="todo-form-section" className="sr-only"></h2>
+        <h2 id="todo-form-section" className=" sr-only"></h2>
         <TodoForm onAdd={handleAddTodo} />
       </section>
 
@@ -169,17 +178,17 @@ export default function TodoList() {
               <button
                 onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
                 disabled={currentPage === 1}
-                className="px-3 py-1 border rounded text-blue-600 disabled:text-gray-400 disabled:cursor-not-allowed"
+                className="px-3 py-1 border rounded text-grey-500 disabled:text-gray-400 disabled:cursor-not-allowed"
               >
                 ⬅ Prev
               </button>
-              <span className="text-gray-600">
+              <span className="text-grey-600">
                 Page {currentPage} of {totalPages}
               </span>
               <button
                 onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
                 disabled={currentPage === totalPages}
-                className="px-3 py-1 border rounded text-blue-600 disabled:text-gray-400 disabled:cursor-not-allowed"
+                className="px-3 py-1 border rounded text-grey-500 disabled:text-grey-400 disabled:cursor-not-allowed"
               >
                 Next ➡
               </button>

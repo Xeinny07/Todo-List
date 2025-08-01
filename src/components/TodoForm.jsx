@@ -5,7 +5,7 @@ export default function TodoForm({ onAdd }) {
   const inputRef = useRef(null);
 
   useEffect(() => {
-    // Autofocus on the input field when component mounts
+    
     inputRef.current?.focus();
   }, []);
 
@@ -13,9 +13,11 @@ export default function TodoForm({ onAdd }) {
     e.preventDefault();
     const trimmedTitle = title.trim();
     if (!trimmedTitle) return;
+
     onAdd(trimmedTitle);
+
     setTitle('');
-    inputRef.current?.focus();  // Reset focus for better accessibility
+    inputRef.current?.focus();  
   };
 
   return (
@@ -43,14 +45,14 @@ export default function TodoForm({ onAdd }) {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Enter todo title"
-          className="flex-grow border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className=" bg-white text-black flex-grow border rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-700"
           aria-required="true"
           aria-describedby="todo-title-helper"
         />
 
         <button
           type="submit"
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition focus:outline-none focus:ring-2 focus:ring-green-400"
+          className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700 transition focus:outline-none focus:ring-2 focus:ring-orange-400"
           aria-label="Add todo"
         >
           Add
@@ -58,7 +60,7 @@ export default function TodoForm({ onAdd }) {
       </form>
 
       {/* Helper text for the input field */}
-      <p id="todo-title-helper" className="sr-only">
+      <p id="todo-title-helper" className=" text-white">
         Enter a new todo title and click Add to create a new todo item.
       </p>
     </section>

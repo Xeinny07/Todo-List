@@ -7,9 +7,7 @@ import {
 
 import App from './App'
 import TodoList from './components/TodoList'
-import TodoDetail from './components/TodoDetail'
-import AddTodo from './components/AddTodo'
-import EditTodo from './components/EditTodo'
+import TodoForm from './components/TodoForm'
 import NotFound from './components/NotFound'
 import ErrorBoundary from './components/ErrorBoundary'
 import ErrorTest from './components/ErrorTest'
@@ -17,6 +15,7 @@ import ErrorTest from './components/ErrorTest'
 // 1. Root layout
 const rootRoute = new RootRoute({
   component: App,
+  errorComponent: ErrorBoundary
 })
 
 // 2. Routes
@@ -26,29 +25,13 @@ const todoListRoute = new Route({
   component: TodoList,
 })
 
-const todoDetailRoute = new Route({
-  getParentRoute: () => rootRoute,
-  path: '/todos/$id',
-  component: TodoDetail,
-})
 
-const addTodoRoute = new Route({
+const TodoFormRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/todos/add',
-  component: AddTodo,
+  component: TodoForm,
 })
 
-const editTodoRoute = new Route({
-  getParentRoute: () => rootRoute,
-  path: '/todos/$todoid/edit',
-  component: EditTodo,
-})
-
-const errorBoundaryRoute = new Route({
-  getParentRoute: () => rootRoute,
-  path: '/error-boundary-test',
-  component: ErrorBoundary,
-})
 
 const errorTestRoute = new Route({
   getParentRoute: () => rootRoute,
@@ -59,10 +42,7 @@ const errorTestRoute = new Route({
 //  Route tree
 const routeTree = rootRoute.addChildren([
   todoListRoute,
-  todoDetailRoute,
-  addTodoRoute,
-  editTodoRoute,
-  errorBoundaryRoute,
+  TodoFormRoute,
   errorTestRoute,
 ])
 
