@@ -17,13 +17,13 @@ This is a simple Todo App built with **Vite + React**. It allows users to:
 ---
 ## Features
 
--Add,edit, and delete tasks
--Mark tasks as complete/incomplete
--Pagination to navigate through pages
--Filter tasks (All, completed, incomplete)
--Responsive and accessible design
--Uses a mock API (e.g JSONplaceholder)
--Deployed with vercel
+- Add,edit, and delete tasks
+- Mark tasks as complete/incomplete
+- Pagination to navigate through pages
+- Filter tasks (All, completed, incomplete)
+- Responsive and accessible design
+- Uses a mock API (e.g JSONplaceholder)
+- Deployed with vercel
 
 ---
 
@@ -72,6 +72,7 @@ npm run build
 
 
  
+
 
 
 
