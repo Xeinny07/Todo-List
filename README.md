@@ -12,7 +12,7 @@ This is a simple Todo App built with **Vite + React**. It allows users to:
 ![Desktop view](https://github.com/Xeinny07/Todo-List/blob/main/Screenshots%20desktop.jpeg)
 
 ### Mobile View
-![Mobile view]
+![Mobile view](https://github.com/Xeinny07/Todo-List/blob/main/Screenshots%20mobile.jpeg)
 
 ---
 ## Features
@@ -72,6 +72,7 @@ npm run build
 
 
  
+
 
 
 
