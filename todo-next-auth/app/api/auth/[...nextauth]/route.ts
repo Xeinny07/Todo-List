@@ -1,9 +1,8 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { PrismaClient } from "@/src/generated/prisma";
+import { prisma } from "@/src/lib/prisma";
 import bcrypt from "bcrypt";
 
-const prisma = new PrismaClient();
 const handler = NextAuth({
   providers: [
     CredentialsProvider({
