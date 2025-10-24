@@ -12,17 +12,23 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const res = await fetch("/api/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-    if (res.ok) {
-      setMessage("Registration successful!");
-      router.push("/login");
-    } else {
-      setMessage("Something went wrong!");
+      const data = await res.json();
+
+      if (res.ok) {
+        setMessage("Registration successful!");
+        router.push("/login");
+      } else {
+        setMessage(data?.message || "Something went wrong!");
+      }
+    } catch (err) {
+      setMessage("Network error, try again!");
     }
   };
 

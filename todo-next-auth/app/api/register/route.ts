@@ -7,23 +7,37 @@ export async function POST(req: Request) {
     const { email, password } = await req.json();
 
     if (!email || !password) {
-      return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Email and password are required" },
+        { status: 400 }
+      );
     }
 
-    const existingUser = await prisma.user.findUnique({ where: { email } });
-    if (existingUser) {
-      return NextResponse.json({ error: "User already exists" }, { status: 400 });
+    
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      return NextResponse.json(
+        { error: "Invalid email or password" },
+        { status: 401 }
+      );
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // Compare hashed password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return NextResponse.json(
+        { error: "Invalid email or password" },
+        { status: 401 }
+      );
+    }
 
-    const user = await prisma.user.create({
-      data: { email, password: hashedPassword },
-    });
-
-    return NextResponse.json({ message: "User created successfully", user });
+    // At this point, login is successful
+    return NextResponse.json({ message: "Login successful", user });
   } catch (error) {
-    console.error("Registration error:", error);
-    return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
+    console.error("Login error:", error);
+    return NextResponse.json(
+      { error: "Something went wrong" },
+      { status: 500 }
+    );
   }
 }
